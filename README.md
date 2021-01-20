@@ -24,7 +24,7 @@ Esto es demasiado sencillo solo necesitas [crear tu cuenta de heroku](https://da
 3. crear main.go adentro de tu carpeta
 4. ejecutar `$ go get -u github.com/lib/pq`
 5. ir a `C:\Program Files\PostgreSQL\11\bin` desde la CLI
-6. ejecutar` $psql -U postgres -h localhost` (la contraseña por default es null entonces dale enter)
+6. ejecutar`$ psql -U postgres -h localhost` (la contraseña por default es null entonces dale enter)
 7. Ponemos las credenciales en nuestro ejemplo para conectarse a la database
 
 ``` 
@@ -37,11 +37,11 @@ import (
 )
 
 const (
-	host = "localhost"
-	port = 5432  //default port...
-	user = "postgres"
-	password = "1298Luis"
-	dbname = "test"
+	host = ""
+	port = 5432  //default port for PostgreSQL...
+	user = ""
+	password = ""
+	dbname = ""
 )
 
 func  main() {
@@ -74,22 +74,17 @@ import (
 )
 
 const (
-	host = "ec2-174-129-214-193.compute-1.amazonaws.com"
-	port = 5432  //default port...
-	user = "ljntzcvjpaiaub"
-	password = "fd81144575ba45006a442595a409d6f38805cf934e15e0a840e8468bcdd25490"
-	dbname = "dac1olv7jidp03"
+	host = ""
+	port = 5432  //default port for PostgreSQL...
+	user = ""
+	password = ""
+	dbname = ""
 )
 
 func  main() {
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=require",
 	host, port, user, password, dbname)
 	db, err := sql.Open("postgres", psqlInfo)
-	if err != nil {
-		panic(err)
-	}
-	defer db.Close()
-	err = db.Ping()
 	if err != nil {
 		panic(err)
 	}
@@ -102,11 +97,70 @@ func  main() {
 		panic(err.Error())
 	}
 	insForm.Exec()
+	defer db.Close()
+	err = db.Ping()
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("Successfully connected!")
+}
+``` 
+11. Select data from Heroku server
+``` 
+package main
+
+import (
+	"database/sql"
+	"fmt"
+	_"github.com/lib/pq"
+)
+
+const (
+	host = ""
+	port = 5432
+	user = ""
+	password = ""
+	dbname = ""
+)
+
+type  Example  struct {
+	id int
+	data string
+}
+
+func  main() {
+	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=require",
+				host, port, user, password, dbname)
+	db, err := sql.Open("postgres", psqlInfo)
+	if err != nil {
+		panic(err)
+	}
+	_,err = db.Exec("CREATE TABLE IF NOT EXISTS example (id integer, data varchar(32))")
+	if err != nil {
+	panic(err)
+	}
+	insForm, err := db.Prepare("INSERT INTO example (id, data) VALUES(1,'test')")
+	if err != nil {
+		panic(err.Error())
+	}
+	insForm.Exec()
+	var  myExample Example
+	query := "SELECT id, data FROM example WHERE id = $1"
+	err = db.QueryRow(query, 1).Scan(&myExample.id, &myExample.data)
+	if err != nil {
+		fmt.Printf("Failed to execute query: ", err)
+	}
+	fmt.Printf("usuario:{ id: %d, data: %s} \n", myExample.id, myExample.data)
+	defer db.Close()
+	err = db.Ping()
+	if err != nil {
+		panic(err)
+	}
 	fmt.Println("Successfully connected!")
 }
 ``` 
 
-# 🤓 Resolucion de dudas existenciales....
+# 🤓 Resolucion de existenciales....
 
 **¿Por que escoger Heroku como mi proveedor cloud?**
 * Permite al desarrollador centrarse en el código en lugar de en la infraestructura.
@@ -154,3 +208,4 @@ func  main() {
 * El costo total de propiedad es muy bajo en comparación con cualquier servidor privado / dedicado.
 * Ofrece facturación y gestión centralizadas
 * Le permite implementar su aplicación en varias regiones del mundo con solo unos pocos clics
+
