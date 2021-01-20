@@ -150,7 +150,7 @@ func  main() {
 	if err != nil {
 		fmt.Printf("Failed to execute query: ", err)
 	}
-	fmt.Printf("usuario:{ id: %d, data: %s} \n", myExample.id, myExample.data)
+	fmt.Printf("Data from Heroku:{ id: %d, data: %s} \n", myExample.id, myExample.data)
 	defer db.Close()
 	err = db.Ping()
 	if err != nil {
