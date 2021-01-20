@@ -209,7 +209,7 @@ func  main() {
 * Ofrece facturación y gestión centralizadas
 * Le permite implementar su aplicación en varias regiones del mundo con solo unos pocos clics
 
-# 🎓 Tutorials 
+# 🎓 Tutoriales 
 
 **Parte 1:**
 
