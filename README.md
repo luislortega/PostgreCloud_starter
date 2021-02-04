@@ -160,7 +160,7 @@ func  main() {
 }
 ``` 
 
-# 🤓 Resolucion de existenciales....
+# 🤓 Resolucion de dudas existenciales....
 
 **¿Por que escoger Heroku como mi proveedor cloud?**
 * Permite al desarrollador centrarse en el código en lugar de en la infraestructura.
